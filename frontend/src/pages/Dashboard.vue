@@ -1,33 +1,44 @@
 <script setup lang="ts">
 import DashboardCard from "../components/DashboardCard.vue";
+import SearchBar from "../components/SearchBar.vue";
 
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const notes = ref([
   {
     id: 1,
-
     title: "Docker Setup",
-
     category: "DevOps",
   },
 
   {
     id: 2,
-
     title: "Vue Tips",
-
     category: "Frontend",
   },
 
   {
     id: 3,
-
     title: "MySQL Guide",
-
     category: "Database",
   },
 ]);
+
+const search = ref("");
+
+const filteredNotes = computed(() => {
+  if (!search.value.trim()) {
+    return notes.value;
+  }
+
+  const keyword = search.value.toLowerCase();
+
+  return notes.value.filter(
+    (note) =>
+      note.title.toLowerCase().includes(keyword) ||
+      note.category.toLowerCase().includes(keyword),
+  );
+});
 
 const deleteNote = (id: number) => {
   notes.value = notes.value.filter((note) => note.id !== id);
@@ -48,12 +59,21 @@ const deleteNote = (id: number) => {
       </router-link>
     </div>
 
+    <div class="search-section">
+      <SearchBar
+        v-model="search"
+        placeholder="
+Search notes...
+"
+      />
+    </div>
+
     <section>
       <h2>My Notes</h2>
 
       <div class="notes">
         <DashboardCard
-          v-for="note in notes"
+          v-for="note in filteredNotes"
           :key="note.id"
           :id="note.id"
           :title="note.title"
@@ -81,7 +101,13 @@ const deleteNote = (id: number) => {
 
   align-items: center;
 
-  margin-bottom: 50px;
+  margin-bottom: 28px;
+
+  gap: 20px;
+}
+
+.search-section {
+  margin-bottom: 36px;
 }
 
 h1 {
@@ -112,6 +138,8 @@ button {
   cursor: pointer;
 
   transition: 0.2s;
+
+  white-space: nowrap;
 }
 
 button:hover {
@@ -139,8 +167,18 @@ h2 {
     flex-direction: column;
 
     align-items: flex-start;
+  }
 
-    gap: 20px;
+  .header a {
+    width: 100%;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 34px;
   }
 }
 </style>
