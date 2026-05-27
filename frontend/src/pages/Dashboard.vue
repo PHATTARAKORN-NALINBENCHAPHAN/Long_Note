@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import DashboardCard from "../components/DashboardCard.vue";
 
-const notes = [
+import { ref } from "vue";
+
+const notes = ref([
   {
     id: 1,
 
@@ -25,7 +27,11 @@ const notes = [
 
     category: "Database",
   },
-];
+]);
+
+const deleteNote = (id: number) => {
+  notes.value = notes.value.filter((note) => note.id !== id);
+};
 </script>
 
 <template>
@@ -48,9 +54,11 @@ const notes = [
       <div class="notes">
         <DashboardCard
           v-for="note in notes"
+          :key="note.id"
           :id="note.id"
           :title="note.title"
           :category="note.category"
+          @delete="deleteNote"
         />
       </div>
     </section>

@@ -15,6 +15,8 @@ const props = defineProps<{
   category: string;
 }>();
 
+const emit = defineEmits(["delete"]);
+
 const openNote = () => {
   router.push(`/note/${props.id}`);
 };
@@ -35,7 +37,9 @@ const openNote = () => {
     <div class="actions">
       <button class="edit" @click.stop="goEdit">Edit</button>
 
-      <button class="delete">Delete</button>
+      <button class="delete" @click.stop="emit('delete', props.id)">
+        Delete
+      </button>
     </div>
   </div>
 </template>
