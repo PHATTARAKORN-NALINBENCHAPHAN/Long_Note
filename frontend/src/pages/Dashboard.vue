@@ -1,204 +1,136 @@
 <script setup lang="ts">
+import DashboardCard from "../components/DashboardCard.vue";
 
-import DashboardCard from
-"../components/DashboardCard.vue"
+const notes = [
+  {
+    id: 1,
 
-const notes=[
+    title: "Docker Setup",
 
-{
+    category: "DevOps",
+  },
 
-id:1,
+  {
+    id: 2,
 
-title:"Docker Setup",
+    title: "Vue Tips",
 
-category:"DevOps"
+    category: "Frontend",
+  },
 
-},
+  {
+    id: 3,
 
-{
+    title: "MySQL Guide",
 
-id:2,
-
-title:"Vue Tips",
-
-category:"Frontend"
-
-},
-
-{
-
-id:3,
-
-title:"MySQL Guide",
-
-category:"Database"
-
-}
-
-]
-
+    category: "Database",
+  },
+];
 </script>
 
 <template>
+  <div class="dashboard">
+    <div class="header">
+      <div>
+        <h1>Dashboard</h1>
 
-<div class="dashboard">
+        <p>จัดการ Notes ของคุณ</p>
+      </div>
 
-<div class="header">
+      <button>+ Create Note</button>
+    </div>
 
-<div>
+    <section>
+      <h2>My Notes</h2>
 
-<h1>
-
-Dashboard
-
-</h1>
-
-<p>
-
-จัดการ Notes ของคุณ
-
-</p>
-
-</div>
-
-<button>
-
-+ Create Note
-
-</button>
-
-</div>
-
-<section>
-
-<h2>
-
-My Notes
-
-</h2>
-
-<div class="notes">
-
-<DashboardCard
-
-v-for="note in notes"
-
-:key="note.id"
-
-:title="note.title"
-
-:category="note.category"
-
-/>
-
-</div>
-
-</section>
-
-</div>
-
+      <div class="notes">
+        <DashboardCard
+          v-for="note in notes"
+          :key="note.id"
+          :title="note.title"
+          :category="note.category"
+        />
+      </div>
+    </section>
+  </div>
 </template>
 
 <style scoped>
+.dashboard {
+  max-width: 1100px;
 
-.dashboard{
+  margin: auto;
 
-max-width:1100px;
-
-margin:auto;
-
-padding:40px;
-
+  padding: 40px;
 }
 
-.header{
+.header {
+  display: flex;
 
-display:flex;
+  justify-content: space-between;
 
-justify-content:space-between;
+  align-items: center;
 
-align-items:center;
-
-margin-bottom:50px;
-
+  margin-bottom: 50px;
 }
 
-h1{
+h1 {
+  font-size: 40px;
 
-font-size:40px;
-
-margin-bottom:8px;
-
+  margin-bottom: 8px;
 }
 
-p{
-
-color:#6B7280;
-
+p {
+  color: #6b7280;
 }
 
-button{
+button {
+  padding: 14px 20px;
 
-padding:14px 20px;
+  background: #4f46e5;
 
-background:#4F46E5;
+  color: white;
 
-color:white;
+  border: none;
 
-border:none;
+  border-radius: 12px;
 
-border-radius:12px;
+  font-size: 15px;
 
-font-size:15px;
+  font-weight: 600;
 
-font-weight:600;
+  cursor: pointer;
 
-cursor:pointer;
-
-transition:.2s;
-
+  transition: 0.2s;
 }
 
-button:hover{
-
-background:#4338CA;
-
+button:hover {
+  background: #4338ca;
 }
 
-h2{
-
-margin-bottom:24px;
-
+h2 {
+  margin-bottom: 24px;
 }
 
-.notes{
+.notes {
+  display: flex;
 
-display:flex;
+  flex-direction: column;
 
-flex-direction:column;
-
-gap:18px;
-
+  gap: 18px;
 }
 
-@media(max-width:768px){
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 24px;
+  }
 
-.dashboard{
+  .header {
+    flex-direction: column;
 
-padding:24px;
+    align-items: flex-start;
 
+    gap: 20px;
+  }
 }
-
-.header{
-
-flex-direction:column;
-
-align-items:flex-start;
-
-gap:20px;
-
-}
-
-}
-
 </style>

@@ -1,144 +1,93 @@
 <script setup lang="ts">
-
 defineProps<{
+  title: string;
 
-title:string
-
-category:string
-
-}>()
-
+  category: string;
+}>();
 </script>
 
 <template>
+  <div class="card">
+    <div>
+      <h3>
+        {{ title }}
+      </h3>
 
-<div class="card">
+      <p>
+        {{ category }}
+      </p>
+    </div>
 
-<div>
+    <div class="actions">
+      <button class="edit">Edit</button>
 
-<h3>
-
-{{ title }}
-
-</h3>
-
-<p>
-
-{{ category }}
-
-</p>
-
-</div>
-
-<div class="actions">
-
-<button
-class="edit"
->
-
-Edit
-
-</button>
-
-<button
-class="delete"
->
-
-Delete
-
-</button>
-
-</div>
-
-</div>
-
+      <button class="delete">Delete</button>
+    </div>
+  </div>
 </template>
 
 <style scoped>
+.card {
+  background: white;
 
-.card{
+  padding: 24px;
 
-background:white;
+  border: 1px solid #ececec;
 
-padding:24px;
+  border-radius: 18px;
 
-border:
+  display: flex;
 
-1px solid #ECECEC;
+  justify-content: space-between;
 
-border-radius:18px;
+  align-items: center;
 
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-transition:.2s;
-
+  transition: 0.2s;
 }
 
-.card:hover{
-
-box-shadow:
-
-0 8px 20px
-rgba(0,0,0,.05);
-
+.card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
-h3{
+h3 {
+  font-size: 18px;
 
-font-size:18px;
-
-margin-bottom:8px;
-
+  margin-bottom: 8px;
 }
 
-p{
+p {
+  color: #6b7280;
 
-color:#6B7280;
-
-font-size:14px;
-
+  font-size: 14px;
 }
 
-.actions{
+.actions {
+  display: flex;
 
-display:flex;
-
-gap:10px;
-
+  gap: 10px;
 }
 
-button{
+button {
+  padding: 8px 14px;
 
-padding:8px 14px;
+  border: none;
 
-border:none;
+  border-radius: 10px;
 
-border-radius:10px;
+  font-weight: 500;
 
-font-weight:500;
-
-cursor:pointer;
-
+  cursor: pointer;
 }
 
-.edit{
+.edit {
+  background: #eef2ff;
 
-background:#EEF2FF;
-
-color:#4F46E5;
-
+  color: #4f46e5;
 }
 
-.delete{
+.delete {
+  background: #fee2e2;
 
-background:#FEE2E2;
-
-color:#DC2626;
-
+  color: #dc2626;
 }
-
 </style>

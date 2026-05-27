@@ -1,105 +1,72 @@
 <script setup lang="ts">
-
-import NoteCard from "../components/NoteCard.vue"
+import NoteCard from "../components/NoteCard.vue";
 
 const notes = [
+  {
+    id: 1,
+    title: "Docker Setup",
+    content: "Learn Docker for deployment",
+    category: "DevOps",
+  },
 
-{
-id:1,
-title:"Docker Setup",
-content:"Learn Docker for deployment",
-category:"DevOps"
-},
+  {
+    id: 2,
+    title: "Vue Tips",
+    content: "Useful Vue patterns",
+    category: "Frontend",
+  },
 
-{
-id:2,
-title:"Vue Tips",
-content:"Useful Vue patterns",
-category:"Frontend"
-},
-
-{
-id:3,
-title:"MySQL Guide",
-content:"Database basics",
-category:"Database"
-}
-
-]
-
+  {
+    id: 3,
+    title: "MySQL Guide",
+    content: "Database basics",
+    category: "Database",
+  },
+];
 </script>
 
 <template>
+  <section class="hero">
+    <h1>Your Ideas, Notes & Stories</h1>
 
-<section class="hero">
+    <p>Simple note and blogging platform</p>
+  </section>
 
-<h1>
-Your Ideas,
-Notes & Stories
-</h1>
-
-<p>
-Simple note and blogging platform
-</p>
-
-</section>
-
-<section class="notes">
-
-<NoteCard
-
-v-for="note in notes"
-
-:key="note.id"
-
-:title="note.title"
-
-:content="note.content"
-
-:category="note.category"
-
-/>
-
-</section>
-
+  <section class="notes">
+    <NoteCard
+      v-for="note in notes"
+      :key="note.id"
+      :title="note.title"
+      :content="note.content"
+      :category="note.category"
+    />
+  </section>
 </template>
 
 <style scoped>
+.hero {
+  text-align: center;
 
-.hero{
-
-text-align:center;
-
-padding:80px 20px;
-
+  padding: 80px 20px;
 }
 
-.hero h1{
+.hero h1 {
+  font-size: 54px;
 
-font-size:54px;
-
-margin-bottom:16px;
-
+  margin-bottom: 16px;
 }
 
-.hero p{
-
-color:#666;
-
+.hero p {
+  color: #666;
 }
 
-.notes{
+.notes {
+  display: grid;
 
-display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 
-grid-template-columns:
+  gap: 24px;
 
-repeat(auto-fit,minmax(280px,1fr));
-
-gap:24px;
-
-padding:40px;
-
+  padding: 40px;
 }
-
 </style>

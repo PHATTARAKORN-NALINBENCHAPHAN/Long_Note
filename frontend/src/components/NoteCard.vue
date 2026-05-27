@@ -1,87 +1,67 @@
 <script setup lang="ts">
-
 defineProps<{
+  title: string;
 
-title:string
+  content: string;
 
-content:string
-
-category:string
-
-}>()
-
+  category: string;
+}>();
 </script>
 
 <template>
+  <div class="card">
+    <div class="badge">
+      {{ category }}
+    </div>
 
-<div class="card">
+    <h3>
+      {{ title }}
+    </h3>
 
-<div class="badge">
-{{ category }}
-</div>
-
-<h3>
-{{ title }}
-</h3>
-
-<p>
-{{ content }}
-</p>
-
-</div>
-
+    <p>
+      {{ content }}
+    </p>
+  </div>
 </template>
 
 <style scoped>
+.card {
+  padding: 20px;
 
-.card{
+  border: 1px solid #eee;
 
-padding:20px;
+  border-radius: 16px;
 
-border:1px solid #eee;
+  background: white;
 
-border-radius:16px;
+  cursor: pointer;
 
-background:white;
-
-cursor:pointer;
-
-transition:.2s;
-
+  transition: 0.2s;
 }
 
-.card:hover{
+.card:hover {
+  transform: translateY(-3px);
 
-transform:translateY(-3px);
-
-box-shadow:
-
-0 6px 16px rgba(0,0,0,.08);
-
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
-.badge{
+.badge {
+  display: inline-block;
 
-display:inline-block;
+  padding: 6px 10px;
 
-padding:6px 10px;
+  background: #f4f4f5;
 
-background:#f4f4f5;
+  border-radius: 999px;
 
-border-radius:999px;
+  font-size: 12px;
 
-font-size:12px;
-
-margin-bottom:12px;
-
+  margin-bottom: 12px;
 }
 
-p{
+p {
+  color: #666;
 
-color:#666;
-
-margin-top:10px;
-
+  margin-top: 10px;
 }
-
 </style>

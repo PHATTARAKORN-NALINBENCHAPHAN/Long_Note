@@ -1,369 +1,218 @@
 <script setup lang="ts">
+import { ref } from "vue";
 
-import { ref } from "vue"
+const username = ref("");
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
 
-const username = ref("")
-const email = ref("")
-const password = ref("")
-const confirmPassword = ref("")
-
-const error = ref("")
+const error = ref("");
 
 const handleRegister = () => {
+  error.value = "";
 
-  error.value = ""
+  if (password.value !== confirmPassword.value) {
+    error.value = "Password ไม่ตรงกัน";
 
-  if(password.value !== confirmPassword.value){
-
-    error.value =
-    "Password ไม่ตรงกัน"
-
-    return
-
+    return;
   }
 
   console.log({
+    username: username.value,
 
-    username:
-    username.value,
+    email: email.value,
 
-    email:
-    email.value,
-
-    password:
-    password.value
-
-  })
-
-}
-
+    password: password.value,
+  });
+};
 </script>
 
 <template>
+  <div class="register-page">
+    <div class="register-card">
+      <h1>Create Account</h1>
 
-<div class="register-page">
+      <p>สมัครสมาชิกเพื่อเริ่มสร้าง Notes ของคุณ</p>
 
-<div class="register-card">
+      <form @submit.prevent="handleRegister">
+        <div class="input-group">
+          <label> Username </label>
 
-<h1>
+          <input v-model="username" type="text" placeholder="your username" />
+        </div>
 
-Create Account
+        <div class="input-group">
+          <label> Email </label>
 
-</h1>
+          <input v-model="email" type="email" placeholder="example@email.com" />
+        </div>
 
-<p>
+        <div class="input-group">
+          <label> Password </label>
 
-สมัครสมาชิกเพื่อเริ่มสร้าง Notes ของคุณ
+          <input v-model="password" type="password" placeholder="••••••••" />
+        </div>
 
-</p>
+        <div class="input-group">
+          <label> Confirm Password </label>
 
-<form
-@submit.prevent="
-handleRegister
-"
->
+          <input
+            v-model="confirmPassword"
+            type="password"
+            placeholder="••••••••"
+          />
+        </div>
 
-<div class="input-group">
+        <p v-if="error" class="error">
+          {{ error }}
+        </p>
 
-<label>
+        <button class="register-btn">Create Account</button>
+      </form>
 
-Username
+      <div class="footer">
+        <span> มีบัญชีแล้ว ? </span>
 
-</label>
-
-<input
-
-v-model="username"
-
-type="text"
-
-placeholder="your username"
-
-/>
-
-</div>
-
-<div class="input-group">
-
-<label>
-
-Email
-
-</label>
-
-<input
-
-v-model="email"
-
-type="email"
-
-placeholder="example@email.com"
-
-/>
-
-</div>
-
-<div class="input-group">
-
-<label>
-
-Password
-
-</label>
-
-<input
-
-v-model="password"
-
-type="password"
-
-placeholder="••••••••"
-
-/>
-
-</div>
-
-<div class="input-group">
-
-<label>
-
-Confirm Password
-
-</label>
-
-<input
-
-v-model="
-confirmPassword
-"
-
-type="password"
-
-placeholder="••••••••"
-
-/>
-
-</div>
-
-<p
-v-if="error"
-class="error"
->
-
-{{ error }}
-
-</p>
-
-<button
-class="register-btn"
->
-
-Create Account
-
-</button>
-
-</form>
-
-<div class="footer">
-
-<span>
-
-มีบัญชีแล้ว ?
-
-</span>
-
-<router-link
-to="/login"
->
-
-Login
-
-</router-link>
-
-</div>
-
-</div>
-
-</div>
-
+        <router-link to="/login"> Login </router-link>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
+.register-page {
+  min-height: calc(100vh - 80px);
 
-.register-page{
+  display: flex;
 
-min-height:
+  justify-content: center;
 
-calc(100vh - 80px);
+  align-items: center;
 
-display:flex;
+  padding: 40px;
 
-justify-content:center;
-
-align-items:center;
-
-padding:40px;
-
-background:#FAFAFB;
-
+  background: #fafafb;
 }
 
-.register-card{
+.register-card {
+  width: 100%;
 
-width:100%;
+  max-width: 460px;
 
-max-width:460px;
+  padding: 40px;
 
-padding:40px;
+  background: white;
 
-background:white;
+  border: 1px solid #ececec;
 
-border:
+  border-radius: 20px;
 
-1px solid #ECECEC;
-
-border-radius:20px;
-
-box-shadow:
-
-0 10px 30px
-rgba(0,0,0,.05);
-
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
-h1{
+h1 {
+  font-size: 32px;
 
-font-size:32px;
-
-margin-bottom:10px;
-
+  margin-bottom: 10px;
 }
 
-p{
+p {
+  color: #6b7280;
 
-color:#6B7280;
-
-margin-bottom:28px;
-
+  margin-bottom: 28px;
 }
 
-form{
+form {
+  display: flex;
 
-display:flex;
+  flex-direction: column;
 
-flex-direction:column;
-
-gap:18px;
-
+  gap: 18px;
 }
 
-.input-group{
+.input-group {
+  display: flex;
 
-display:flex;
+  flex-direction: column;
 
-flex-direction:column;
-
-gap:8px;
-
+  gap: 8px;
 }
 
-label{
+label {
+  font-size: 14px;
 
-font-size:14px;
-
-font-weight:500;
-
+  font-weight: 500;
 }
 
-input{
+input {
+  padding: 14px 16px;
 
-padding:14px 16px;
+  border: 1px solid #d1d5db;
 
-border:
+  border-radius: 12px;
 
-1px solid #D1D5DB;
+  font-size: 15px;
 
-border-radius:12px;
+  outline: none;
 
-font-size:15px;
-
-outline:none;
-
-transition:.2s;
-
+  transition: 0.2s;
 }
 
-input:focus{
+input:focus {
+  border-color: #4f46e5;
 
-border-color:#4F46E5;
-
-box-shadow:
-
-0 0 0 4px
-rgba(79,70,229,.12);
-
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
 }
 
-.error{
+.error {
+  margin: 0;
 
-margin:0;
+  font-size: 14px;
 
-font-size:14px;
-
-color:#DC2626;
-
+  color: #dc2626;
 }
 
-.register-btn{
+.register-btn {
+  margin-top: 8px;
 
-margin-top:8px;
+  padding: 14px;
 
-padding:14px;
+  background: #4f46e5;
 
-background:#4F46E5;
+  color: white;
 
-color:white;
+  border: none;
 
-border:none;
+  border-radius: 12px;
 
-border-radius:12px;
+  font-size: 15px;
 
-font-size:15px;
+  font-weight: 600;
 
-font-weight:600;
+  cursor: pointer;
 
-cursor:pointer;
-
-transition:.2s;
-
+  transition: 0.2s;
 }
 
-.register-btn:hover{
-
-background:#4338CA;
-
+.register-btn:hover {
+  background: #4338ca;
 }
 
-.footer{
+.footer {
+  margin-top: 24px;
 
-margin-top:24px;
+  text-align: center;
 
-text-align:center;
-
-color:#6B7280;
-
+  color: #6b7280;
 }
 
-.footer a{
+.footer a {
+  margin-left: 6px;
 
-margin-left:6px;
+  text-decoration: none;
 
-text-decoration:none;
+  font-weight: 600;
 
-font-weight:600;
-
-color:#4F46E5;
-
+  color: #4f46e5;
 }
-
 </style>

@@ -1,250 +1,170 @@
 <template>
+  <nav class="navbar">
+    <router-link to="/" class="logo"> NoteSpace </router-link>
 
-<nav class="navbar">
+    <div class="nav-center">
+      <router-link to="/"> Home </router-link>
 
-  <router-link
-    to="/"
-    class="logo"
-  >
+      <router-link to="/about"> About </router-link>
 
-    NoteSpace
+      <router-link to="/dashboard"> Dashboard </router-link>
+    </div>
 
-  </router-link>
+    <div class="nav-right">
+      <router-link to="/login" class="login-btn"> Login </router-link>
 
-  <div class="nav-center">
-
-    <router-link to="/">
-      Home
-    </router-link>
-
-    <router-link to="/about">
-      About
-    </router-link>
-
-    <router-link to="/dashboard">
-      Dashboard
-    </router-link>
-
-  </div>
-
-  <div class="nav-right">
-
-    <router-link
-      to="/login"
-      class="login-btn"
-    >
-
-      Login
-
-    </router-link>
-
-    <router-link
-      to="/register"
-      class="register-btn"
-    >
-
-      Register
-
-    </router-link>
-
-  </div>
-
-</nav>
-
+      <router-link to="/register" class="register-btn"> Register </router-link>
+    </div>
+  </nav>
 </template>
 
 <style scoped>
+.navbar {
+  display: flex;
 
-.navbar{
+  justify-content: space-between;
 
-display:flex;
+  align-items: center;
 
-justify-content:space-between;
+  padding: 18px 48px;
 
-align-items:center;
+  background: white;
 
-padding:18px 48px;
+  border-bottom: 1px solid #ececec;
 
-background:white;
+  position: sticky;
 
-border-bottom:
+  top: 0;
 
-1px solid #ECECEC;
-
-position:sticky;
-
-top:0;
-
-z-index:100;
-
+  z-index: 100;
 }
 
-.logo{
+.logo {
+  font-size: 24px;
 
-font-size:24px;
+  font-weight: 700;
 
-font-weight:700;
+  text-decoration: none;
 
-text-decoration:none;
+  color: #4f46e5;
 
-color:#4F46E5;
-
-letter-spacing:-0.5px;
-
+  letter-spacing: -0.5px;
 }
 
-.nav-center{
+.nav-center {
+  display: flex;
 
-display:flex;
-
-gap:32px;
-
+  gap: 32px;
 }
 
-.nav-center a{
+.nav-center a {
+  text-decoration: none;
 
-text-decoration:none;
+  color: #52525b;
 
-color:#52525B;
+  font-size: 15px;
 
-font-size:15px;
+  font-weight: 500;
 
-font-weight:500;
+  padding: 8px 0;
 
-padding:8px 0;
+  position: relative;
 
-position:relative;
-
-transition:.2s;
-
+  transition: 0.2s;
 }
 
-.nav-center a:hover{
-
-color:#4F46E5;
-
+.nav-center a:hover {
+  color: #4f46e5;
 }
 
-.nav-center a::after{
+.nav-center a::after {
+  content: "";
 
-content:"";
+  position: absolute;
 
-position:absolute;
+  left: 0;
 
-left:0;
+  bottom: -2px;
 
-bottom:-2px;
+  width: 0;
 
-width:0;
+  height: 2px;
 
-height:2px;
+  background: #4f46e5;
 
-background:#4F46E5;
-
-transition:.25s;
-
+  transition: 0.25s;
 }
 
-.nav-center a:hover::after{
-
-width:100%;
-
+.nav-center a:hover::after {
+  width: 100%;
 }
 
-.nav-right{
+.nav-right {
+  display: flex;
 
-display:flex;
-
-gap:12px;
-
+  gap: 12px;
 }
 
-.login-btn{
+.login-btn {
+  padding: 10px 18px;
 
-padding:10px 18px;
+  border: 1px solid #e4e4e7;
 
-border:
+  border-radius: 999px;
 
-1px solid #E4E4E7;
+  text-decoration: none;
 
-border-radius:999px;
+  color: #111827;
 
-text-decoration:none;
+  font-weight: 500;
 
-color:#111827;
-
-font-weight:500;
-
-transition:.2s;
-
+  transition: 0.2s;
 }
 
-.login-btn:hover{
-
-background:#F4F4F5;
-
+.login-btn:hover {
+  background: #f4f4f5;
 }
 
-.register-btn{
+.register-btn {
+  padding: 10px 18px;
 
-padding:10px 18px;
+  background: #4f46e5;
 
-background:#4F46E5;
+  color: white;
 
-color:white;
+  border-radius: 999px;
 
-border-radius:999px;
+  text-decoration: none;
 
-text-decoration:none;
+  font-weight: 500;
 
-font-weight:500;
+  transition: 0.25s;
 
-transition:.25s;
-
-box-shadow:
-
-0 4px 14px
-rgba(79,70,229,.25);
-
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
 }
 
-.register-btn:hover{
+.register-btn:hover {
+  background: #4338ca;
 
-background:#4338CA;
-
-transform:
-
-translateY(-2px);
-
+  transform: translateY(-2px);
 }
 
-@media(max-width:768px){
+@media (max-width: 768px) {
+  .navbar {
+    padding: 16px 24px;
+  }
 
-.navbar{
+  .nav-center {
+    gap: 16px;
+  }
 
-padding:16px 24px;
+  .logo {
+    font-size: 20px;
+  }
 
+  .login-btn,
+  .register-btn {
+    padding: 8px 14px;
+  }
 }
-
-.nav-center{
-
-gap:16px;
-
-}
-
-.logo{
-
-font-size:20px;
-
-}
-
-.login-btn,
-.register-btn{
-
-padding:8px 14px;
-
-}
-
-}
-
 </style>
