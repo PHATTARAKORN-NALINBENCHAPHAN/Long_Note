@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import pool from "../config/db";
 import { hashPassword } from "../utils/hash";
+import { comparePassword } from "../utils/hash";
+import { generateToken } from "../utils/jwt";
 
 export const register = async (
   req: Request,
@@ -34,6 +36,60 @@ export const register = async (
 
     res.status(500).json({
       message: "Register failed",
+    });
+  }
+};
+
+export const login = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { email, password } =
+      req.body;
+
+    const [users]: any =
+      await pool.query(
+        `
+        SELECT * FROM users
+        WHERE email = ?
+        `,
+        [email]
+      );
+
+    const user = users[0];
+
+    if (!user) {
+      return res.status(401).json({
+        message:
+          "Invalid credentials",
+      });
+    }
+
+    const isMatch =
+      await comparePassword(
+        password,
+        user.password
+      );
+
+    if (!isMatch) {
+      return res.status(401).json({
+        message:
+          "Invalid credentials",
+      });
+    }
+
+    const token =
+      generateToken(user.id);
+
+    res.json({
+      token,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: "Login failed",
     });
   }
 };
