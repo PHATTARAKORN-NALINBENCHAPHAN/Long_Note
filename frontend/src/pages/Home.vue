@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import NoteCard from "../components/NoteCard.vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
+
+const openNote = (id: number) => {
+  router.push(`/note/${id}`);
+};
 const notes = [
   {
     id: 1,
@@ -39,6 +45,7 @@ const notes = [
       :title="note.title"
       :content="note.content"
       :category="note.category"
+      @click="openNote(note.id)"
     />
   </section>
 </template>

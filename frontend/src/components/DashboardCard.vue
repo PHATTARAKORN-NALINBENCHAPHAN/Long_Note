@@ -1,13 +1,23 @@
 <script setup lang="ts">
-defineProps<{
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const props = defineProps<{
+  id: number;
+
   title: string;
 
   category: string;
 }>();
+
+const openNote = () => {
+  router.push(`/note/${props.id}`);
+};
 </script>
 
 <template>
-  <div class="card">
+  <div class="card" @click="openNote">
     <div>
       <h3>
         {{ title }}

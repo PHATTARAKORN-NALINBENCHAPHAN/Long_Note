@@ -6,6 +6,7 @@ import Register from "../pages/Register.vue";
 import Dashboard from "../pages/Dashboard.vue";
 import About from "../pages/About.vue";
 import CreateNote from "../pages/CreateNote.vue";
+import NoteDetail from "../pages/NoteDetail.vue";
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: "/create",
 
     component: CreateNote,
+  },
+  {
+    path: "/note/:id",
+
+    component: NoteDetail,
   },
 ];
 

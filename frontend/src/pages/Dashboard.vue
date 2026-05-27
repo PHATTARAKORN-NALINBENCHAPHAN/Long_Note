@@ -37,7 +37,9 @@ const notes = [
         <p>จัดการ Notes ของคุณ</p>
       </div>
 
-      <button>+ Create Note</button>
+      <router-link to="/create">
+        <button>+ Create Note</button>
+      </router-link>
     </div>
 
     <section>
@@ -46,7 +48,7 @@ const notes = [
       <div class="notes">
         <DashboardCard
           v-for="note in notes"
-          :key="note.id"
+          :id="note.id"
           :title="note.title"
           :category="note.category"
         />
