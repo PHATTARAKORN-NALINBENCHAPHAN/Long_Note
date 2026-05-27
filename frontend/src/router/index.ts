@@ -7,6 +7,7 @@ import Dashboard from "../pages/Dashboard.vue";
 import About from "../pages/About.vue";
 import CreateNote from "../pages/CreateNote.vue";
 import NoteDetail from "../pages/NoteDetail.vue";
+import EditNote from "../pages/EditNote.vue";
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: "/note/:id",
 
     component: NoteDetail,
+  },
+  {
+    path: "/edit/:id",
+
+    component: EditNote,
   },
 ];
 

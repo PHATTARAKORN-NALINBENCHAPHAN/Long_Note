@@ -3,6 +3,10 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
+const goEdit = () => {
+  router.push(`/edit/${props.id}`);
+};
+
 const props = defineProps<{
   id: number;
 
@@ -29,7 +33,7 @@ const openNote = () => {
     </div>
 
     <div class="actions">
-      <button class="edit">Edit</button>
+      <button class="edit" @click.stop="goEdit">Edit</button>
 
       <button class="delete">Delete</button>
     </div>
