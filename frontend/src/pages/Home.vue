@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import Navbar from "../components/Navbar.vue"
 import NoteCard from "../components/NoteCard.vue"
 
 const notes = [
@@ -31,8 +30,6 @@ category:"Database"
 </script>
 
 <template>
-
-<Navbar />
 
 <section class="hero">
 
