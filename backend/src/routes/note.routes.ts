@@ -8,7 +8,8 @@ import {
   getNotes,
   updateNote,
   deleteNote,
-  searchNotes
+  searchNotes,
+  getNotesByCategory
 }
 from "../controllers/note.controller";
 
@@ -30,6 +31,12 @@ router.get(
   "/search",
   verifyToken,
   searchNotes
+);
+
+router.get(
+  "/category/:category",
+  verifyToken,
+  getNotesByCategory
 );
 
 router.put(
