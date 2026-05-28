@@ -224,3 +224,54 @@ export const deleteNote = async (
   }
 
 };
+
+export const searchNotes = async (
+  req: Request,
+  res: Response
+) => {
+
+  try {
+
+    const { q } = req.query;
+
+    const user =
+      (req as any).user;
+
+    const keyword =
+      `%${q}%`;
+
+    const [notes] =
+      await pool.query(
+        `
+        SELECT *
+        FROM notes
+        WHERE user_id = ?
+        AND (
+          title LIKE ?
+          OR content LIKE ?
+          OR category LIKE ?
+        )
+        ORDER BY created_at DESC
+        `,
+        [
+          user.userId,
+          keyword,
+          keyword,
+          keyword
+        ]
+      );
+
+    res.json(notes);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message:
+        "Search notes failed"
+    });
+
+  }
+
+};

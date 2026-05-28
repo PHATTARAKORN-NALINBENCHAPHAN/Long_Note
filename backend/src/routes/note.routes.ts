@@ -7,7 +7,8 @@ import {
   createNote,
   getNotes,
   updateNote,
-  deleteNote
+  deleteNote,
+  searchNotes
 }
 from "../controllers/note.controller";
 
@@ -23,6 +24,12 @@ router.get(
   "/",
   verifyToken,
   getNotes
+);
+//search ต้องอยู่ “ก่อน” ไม่งั้น Express จะคิดว่า "search" คือ id
+router.get(
+  "/search",
+  verifyToken,
+  searchNotes
 );
 
 router.put(
