@@ -47,3 +47,39 @@ export const createNote = async (
   }
 
 };
+
+export const getNotes = async (
+  req: Request,
+  res: Response
+) => {
+
+  try {
+
+    const user =
+      (req as any).user;
+
+    const [notes] =
+      await pool.query(
+        `
+        SELECT *
+        FROM notes
+        WHERE user_id = ?
+        ORDER BY created_at DESC
+        `,
+        [user.userId]
+      );
+
+    res.json(notes);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message:
+        "Get notes failed"
+    });
+
+  }
+
+};
