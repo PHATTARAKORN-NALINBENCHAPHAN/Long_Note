@@ -354,3 +354,57 @@ export const getNotesByCategory =
     }
 
 };
+
+export const getSingleNote = async (
+  req: Request,
+  res: Response
+) => {
+
+  try {
+
+    const { id } =
+      req.params;
+
+    const user =
+      (req as any).user;
+
+    const [notes]: any =
+      await pool.query(
+        `
+        SELECT *
+        FROM notes
+        WHERE id = ?
+        AND user_id = ?
+        `,
+        [
+          id,
+          user.userId
+        ]
+      );
+
+    const note =
+      notes[0];
+
+    if (!note) {
+
+      return res.status(404).json({
+        message:
+          "Note not found"
+      });
+
+    }
+
+    res.json(note);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message:
+        "Get single note failed"
+    });
+
+  }
+
+};

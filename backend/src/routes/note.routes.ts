@@ -9,7 +9,8 @@ import {
   updateNote,
   deleteNote,
   searchNotes,
-  getNotesByCategory
+  getNotesByCategory,
+  getSingleNote
 }
 from "../controllers/note.controller";
 
@@ -37,6 +38,12 @@ router.get(
   "/category/:category",
   verifyToken,
   getNotesByCategory
+);
+//ต้องไม่โดนจับเป็น :id ต้องยุก่อน getToken เด้อ
+router.get(
+  "/:id",
+  verifyToken,
+  getSingleNote
 );
 
 router.put(
