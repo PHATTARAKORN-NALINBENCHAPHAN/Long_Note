@@ -6,8 +6,10 @@ import noteRoutes from "./routes/note.routes";
 import {
   errorHandler
 } from "./middleware/error.middleware";
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 
 app.use(express.json());
 
