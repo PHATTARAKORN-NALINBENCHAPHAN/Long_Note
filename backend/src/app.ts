@@ -2,6 +2,7 @@ import express from "express";
 import pool from "./config/db";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
+import noteRoutes from "./routes/note.routes";
 
 const app = express();
 
@@ -30,5 +31,7 @@ app.get("/db-test", async (_, res) => {
 app.use("/auth", authRoutes);
 
 app.use("/user", userRoutes);
+
+app.use("/notes", noteRoutes);
 
 export default app;
