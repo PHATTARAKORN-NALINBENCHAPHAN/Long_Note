@@ -1,29 +1,80 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+import {
+  useRouter
+} from "vue-router";
+
+import api from "../lib/api";
+
+const router = useRouter();
+
 const username = ref("");
+
 const email = ref("");
+
 const password = ref("");
-const confirmPassword = ref("");
+
+const confirmPassword =
+  ref("");
 
 const error = ref("");
 
-const handleRegister = () => {
-  error.value = "";
+const loading =
+  ref(false);
 
-  if (password.value !== confirmPassword.value) {
-    error.value = "Password ไม่ตรงกัน";
+const handleRegister =
+  async () => {
 
-    return;
-  }
+    error.value = "";
 
-  console.log({
-    username: username.value,
+    if (
+      password.value !==
+      confirmPassword.value
+    ) {
 
-    email: email.value,
+      error.value =
+        "Password ไม่ตรงกัน";
 
-    password: password.value,
-  });
+      return;
+
+    }
+
+    try {
+
+      loading.value = true;
+
+      await api.post(
+        "/auth/register",
+        {
+          username:
+            username.value,
+          email:
+            email.value,
+          password:
+            password.value,
+        }
+      );
+
+      router.push(
+        "/login"
+      );
+
+    } catch (err: any) {
+
+      error.value =
+        err.response?.data
+          ?.message
+        ||
+        "Register failed";
+
+    } finally {
+
+      loading.value =
+        false;
+
+    }
+
 };
 </script>
 

@@ -2,74 +2,105 @@
 import NoteCard from "../components/NoteCard.vue";
 import SearchBar from "../components/SearchBar.vue";
 
-import { useRouter } from "vue-router";
-import { ref, computed } from "vue";
+import {
+  ref,
+  computed,
+  onMounted
+} from "vue";
+
+import { useRouter }
+from "vue-router";
+
+import api from "../lib/api";
 
 const router = useRouter();
 
 const search = ref("");
 
-const openNote = (id:number) => {
-  router.push(`/note/${id}`);
-};
+const notes = ref<any[]>([]);
 
-const notes = [
-  {
-    id:1,
-    title:"Docker Setup",
-    content:"Learn Docker for deployment",
-    category:"DevOps",
-  },
+const fetchNotes = async () => {
 
-  {
-    id:2,
-    title:"Vue Tips",
-    content:"Useful Vue patterns",
-    category:"Frontend",
-  },
+  try {
 
-  {
-    id:3,
-    title:"MySQL Guide",
-    content:"Database basics",
-    category:"Database",
-  },
-];
+    const response =
+      await api.get(
+        "/notes"
+      );
 
-const filteredNotes = computed(()=>{
+    notes.value =
+      response.data.data;
 
-  if(!search.value.trim()){
+  } catch (error) {
 
-    return notes;
+    console.log(error);
 
   }
 
-  const keyword =
-    search.value.toLowerCase();
+};
 
-  return notes.filter(note=>{
+onMounted(() => {
 
-    return(
+  fetchNotes();
 
-      note.title
-      .toLowerCase()
-      .includes(keyword)
+});
 
-      ||
+const openNote = (
+  id: number
+) => {
 
-      note.content
-      .toLowerCase()
-      .includes(keyword)
+  router.push(
+    `/note/${id}`
+  );
 
-      ||
+};
 
-      note.category
-      .toLowerCase()
-      .includes(keyword)
+const filteredNotes =
+  computed(() => {
 
+    if (
+      !search.value.trim()
+    ) {
+
+      return notes.value;
+
+    }
+
+    const keyword =
+      search.value
+        .toLowerCase();
+
+    return notes.value.filter(
+      (note) => {
+
+        return (
+
+          note.title
+            .toLowerCase()
+            .includes(
+              keyword
+            )
+
+          ||
+
+          note.content
+            .toLowerCase()
+            .includes(
+              keyword
+            )
+
+          ||
+
+          note.category
+            .toLowerCase()
+            .includes(
+              keyword
+            )
+
+        );
+
+      }
     );
-
-  });
 
 });
 </script>
