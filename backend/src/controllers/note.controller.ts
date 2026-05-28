@@ -1,9 +1,15 @@
-import { Request, Response } from "express";
+import {
+  Request,
+  Response,
+  NextFunction
+} from "express";
 import pool from "../config/db";
+
 
 export const createNote = async (
   req: Request,
-  res: Response
+  res: Response,
+ next: NextFunction
 ) => {
 
   try {
@@ -37,20 +43,16 @@ export const createNote = async (
 
   } catch (error) {
 
-    console.log(error);
+  next(error);
 
-    res.status(500).json({
-      message:
-        "Create note failed"
-    });
-
-  }
+}
 
 };
 
 export const getNotes = async (
   req: Request,
-  res: Response
+  res: Response,
+ next: NextFunction
 ) => {
 
   try {
@@ -108,20 +110,16 @@ export const getNotes = async (
 
   } catch (error) {
 
-    console.log(error);
+  next(error);
 
-    res.status(500).json({
-      message:
-        "Get notes failed"
-    });
-
-  }
+}
 
 };
 
 export const updateNote = async (
   req: Request,
-  res: Response
+  res: Response,
+ next: NextFunction
 ) => {
 
   try {
@@ -186,20 +184,16 @@ export const updateNote = async (
 
   } catch (error) {
 
-    console.log(error);
+  next(error);
 
-    res.status(500).json({
-      message:
-        "Update note failed"
-    });
-
-  }
+}
 
 };
 
 export const deleteNote = async (
   req: Request,
-  res: Response
+  res: Response,
+ next: NextFunction
 ) => {
 
   try {
@@ -249,20 +243,16 @@ export const deleteNote = async (
 
   } catch (error) {
 
-    console.log(error);
+  next(error);
 
-    res.status(500).json({
-      message:
-        "Delete note failed"
-    });
-
-  }
+}
 
 };
 
 export const searchNotes = async (
   req: Request,
-  res: Response
+  res: Response,
+ next: NextFunction
 ) => {
 
   try {
@@ -300,21 +290,17 @@ export const searchNotes = async (
 
   } catch (error) {
 
-    console.log(error);
+  next(error);
 
-    res.status(500).json({
-      message:
-        "Search notes failed"
-    });
-
-  }
+}
 
 };
 
 export const getNotesByCategory =
   async (
     req: Request,
-    res: Response
+    res: Response,
+ next: NextFunction
   ) => {
 
     try {
@@ -357,7 +343,8 @@ export const getNotesByCategory =
 
 export const getSingleNote = async (
   req: Request,
-  res: Response
+  res: Response,
+ next: NextFunction
 ) => {
 
   try {
@@ -398,13 +385,8 @@ export const getSingleNote = async (
 
   } catch (error) {
 
-    console.log(error);
+  next(error);
 
-    res.status(500).json({
-      message:
-        "Get single note failed"
-    });
-
-  }
+}
 
 };

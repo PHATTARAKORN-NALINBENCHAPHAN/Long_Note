@@ -3,6 +3,9 @@ import pool from "./config/db";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import noteRoutes from "./routes/note.routes";
+import {
+  errorHandler
+} from "./middleware/error.middleware";
 
 const app = express();
 
@@ -33,5 +36,7 @@ app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 
 app.use("/notes", noteRoutes);
+
+app.use(errorHandler);
 
 export default app;

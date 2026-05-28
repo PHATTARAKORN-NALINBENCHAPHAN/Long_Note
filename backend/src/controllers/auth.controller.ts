@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import pool from "../config/db";
 import { hashPassword } from "../utils/hash";
 import { comparePassword } from "../utils/hash";
@@ -6,7 +6,8 @@ import { generateToken } from "../utils/jwt";
 
 export const register = async (
   req: Request,
-  res: Response
+  res: Response,
+   next: NextFunction
 ) => {
   try {
     const { username, email, password } =
@@ -32,17 +33,16 @@ export const register = async (
       message: "User created",
     });
   } catch (error) {
-    console.log(error);
 
-    res.status(500).json({
-      message: "Register failed",
-    });
-  }
+  next(error);
+
+}
 };
 
 export const login = async (
   req: Request,
-  res: Response
+  res: Response,
+ next: NextFunction
 ) => {
   try {
     const { email, password } =
@@ -86,10 +86,8 @@ export const login = async (
       token,
     });
   } catch (error) {
-    console.log(error);
 
-    res.status(500).json({
-      message: "Login failed",
-    });
-  }
+  next(error);
+
+}
 };
