@@ -6,7 +6,8 @@ from "../middleware/auth.middleware";
 import {
   createNote,
   getNotes,
-  updateNote
+  updateNote,
+  deleteNote
 }
 from "../controllers/note.controller";
 
@@ -28,6 +29,12 @@ router.put(
   "/:id",
   verifyToken,
   updateNote
+);
+
+router.delete(
+  "/:id",
+  verifyToken,
+  deleteNote
 );
 
 export default router;
