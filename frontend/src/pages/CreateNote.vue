@@ -2,32 +2,51 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
+import api from "../lib/api";
+
 const router = useRouter();
 
 const title = ref("");
 const category = ref("");
 const content = ref("");
 
-const handleSubmit = () => {
-  if (!title.value || !category.value || !content.value) {
-    alert("กรุณากรอกข้อมูลให้ครบ");
+const handleSubmit = async () => {
+
+  if (
+    !title.value ||
+    !category.value ||
+    !content.value
+  ) {
+
+    alert(
+      "กรุณากรอกข้อมูลให้ครบ"
+    );
 
     return;
+
   }
 
-  const note = {
-    title: title.value,
+  try {
 
-    category: category.value,
+    await api.post(
+      "/notes",
+      {
+        title: title.value,
+        category: category.value,
+        content: content.value,
+      }
+    );
 
-    content: content.value,
+    router.push(
+      "/dashboard"
+    );
 
-    createdAt: new Date(),
-  };
+  } catch (error) {
 
-  console.log(note);
+    console.log(error);
 
-  router.push("/dashboard");
+  }
+
 };
 </script>
 

@@ -2,46 +2,94 @@
 import DashboardCard from "../components/DashboardCard.vue";
 import SearchBar from "../components/SearchBar.vue";
 
-import { ref, computed } from "vue";
+import {
+  ref,
+  computed,
+  onMounted
+} from "vue";
 
-const notes = ref([
-  {
-    id: 1,
-    title: "Docker Setup",
-    category: "DevOps",
-  },
+import api from "../lib/api";
 
-  {
-    id: 2,
-    title: "Vue Tips",
-    category: "Frontend",
-  },
-
-  {
-    id: 3,
-    title: "MySQL Guide",
-    category: "Database",
-  },
-]);
+const notes = ref<any[]>([]);
 
 const search = ref("");
 
-const filteredNotes = computed(() => {
-  if (!search.value.trim()) {
-    return notes.value;
+const fetchNotes = async () => {
+
+  try {
+
+    const response =
+      await api.get(
+        "/notes"
+      );
+
+    notes.value =
+      response.data.data;
+
+    console.log(
+      response.data
+    );
+
+  } catch (error) {
+
+    console.log(error);
+
   }
 
-  const keyword = search.value.toLowerCase();
+};
+
+onMounted(() => {
+
+  fetchNotes();
+
+});
+
+const filteredNotes = computed(() => {
+
+  if (!search.value.trim()) {
+
+    return notes.value;
+
+  }
+
+  const keyword =
+    search.value.toLowerCase();
 
   return notes.value.filter(
     (note) =>
-      note.title.toLowerCase().includes(keyword) ||
-      note.category.toLowerCase().includes(keyword),
+      note.title
+        .toLowerCase()
+        .includes(keyword)
+      ||
+      note.category
+        .toLowerCase()
+        .includes(keyword)
   );
+
 });
 
-const deleteNote = (id: number) => {
-  notes.value = notes.value.filter((note) => note.id !== id);
+const deleteNote = async (
+  id: number
+) => {
+
+  try {
+
+    await api.delete(
+      `/notes/${id}`
+    );
+
+    notes.value =
+      notes.value.filter(
+        (note) =>
+          note.id !== id
+      );
+
+  } catch (error) {
+
+    console.log(error);
+
+  }
+
 };
 </script>
 

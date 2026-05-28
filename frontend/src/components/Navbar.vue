@@ -1,3 +1,30 @@
+<script setup lang="ts">
+import { computed } from "vue";
+
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const isLoggedIn = computed(() => {
+
+  return !!localStorage.getItem(
+    "token"
+  );
+
+});
+
+const handleLogout = () => {
+
+  localStorage.removeItem(
+    "token"
+  );
+
+  router.push("/login");
+
+  window.location.reload();
+
+};
+</script>
 <template>
   <nav class="navbar">
     <router-link to="/" class="logo"> NoteSpace </router-link>
@@ -11,10 +38,41 @@
     </div>
 
     <div class="nav-right">
-      <router-link to="/login" class="login-btn"> Login </router-link>
 
-      <router-link to="/register" class="register-btn"> Register </router-link>
+  <template v-if="isLoggedIn">
+
+    <div class="profile">
+      👤 User
     </div>
+
+    <button
+      class="logout-btn"
+      @click="handleLogout"
+    >
+      Logout
+    </button>
+
+  </template>
+
+  <template v-else>
+
+    <router-link
+      to="/login"
+      class="login-btn"
+    >
+      Login
+    </router-link>
+
+    <router-link
+      to="/register"
+      class="register-btn"
+    >
+      Register
+    </router-link>
+
+  </template>
+
+</div>
   </nav>
 </template>
 
@@ -166,5 +224,38 @@
   .register-btn {
     padding: 8px 14px;
   }
+}
+.logout-btn {
+  padding: 10px 18px;
+
+  border: none;
+
+  border-radius: 999px;
+
+  background: #ef4444;
+
+  color: white;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+}
+
+.profile {
+  display: flex;
+
+  align-items: center;
+
+  padding: 0 10px;
+
+  font-weight: 600;
+
+  color: #374151;
 }
 </style>

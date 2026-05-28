@@ -1,72 +1,102 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { useRoute } from "vue-router";
-import { useRouter } from "vue-router";
+import {
+  ref,
+  onMounted
+} from "vue";
+
+import {
+  useRoute,
+  useRouter
+} from "vue-router";
+
+import api from "../lib/api";
 
 const route = useRoute();
+
 const router = useRouter();
 
-const mockNotes = [
-  {
-    id: 1,
+const title = ref("");
 
-    title: "Docker Setup",
+const category = ref("");
 
-    category: "DevOps",
+const content = ref("");
 
-    content: "Learn Docker deployment",
-  },
+const fetchNote = async () => {
 
-  {
-    id: 2,
+  try {
 
-    title: "Vue Tips",
+    const response =
+      await api.get(
+        `/notes/${route.params.id}`
+      );
 
-    category: "Frontend",
+    const note =
+      response.data;
 
-    content: "Useful Vue patterns",
-  },
+    title.value =
+      note.title;
 
-  {
-    id: 3,
+    category.value =
+      note.category;
 
-    title: "MySQL Guide",
+    content.value =
+      note.content;
 
-    category: "Database",
+  } catch (error) {
 
-    content: "MySQL basics",
-  },
-];
+    console.log(error);
 
-const note = mockNotes.find((item) => item.id === Number(route.params.id));
-
-const title = ref(note?.title || "");
-
-const category = ref(note?.category || "");
-
-const content = ref(note?.content || "");
-
-const handleUpdate = () => {
-  if (!title.value || !category.value || !content.value) {
-    alert("กรอกข้อมูลให้ครบ");
-
-    return;
   }
 
-  const updatedNote = {
-    id: route.params.id,
-
-    title: title.value,
-
-    category: category.value,
-
-    content: content.value,
-  };
-
-  console.log(updatedNote);
-
-  router.push("/dashboard");
 };
+
+const handleUpdate =
+  async () => {
+
+    if (
+      !title.value ||
+      !category.value ||
+      !content.value
+    ) {
+
+      alert(
+        "กรอกข้อมูลให้ครบ"
+      );
+
+      return;
+
+    }
+
+    try {
+
+      await api.put(
+        `/notes/${route.params.id}`,
+        {
+          title: title.value,
+          category:
+            category.value,
+          content:
+            content.value,
+        }
+      );
+
+      router.push(
+        "/dashboard"
+      );
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+};
+
+onMounted(() => {
+
+  fetchNote();
+
+});
 </script>
 
 <template>

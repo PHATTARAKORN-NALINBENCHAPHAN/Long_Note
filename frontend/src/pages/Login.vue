@@ -1,14 +1,46 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import api from "../lib/api";
+import router from "../router";
 
 const email = ref("");
 const password = ref("");
+const loading = ref(false);
 
-const handleLogin = () => {
-  console.log({
-    email: email.value,
-    password: password.value,
-  });
+const handleLogin = async () => {
+
+  try {
+
+    loading.value = true;
+
+    const response =
+      await api.post(
+        "/auth/login",
+        {
+          email: email.value,
+          password: password.value,
+        }
+      );
+
+    localStorage.setItem(
+      "token",
+      response.data.token
+    );
+
+    router.push(
+      "/dashboard"
+    );
+
+  } catch (error) {
+
+    console.log(error);
+
+  } finally {
+
+    loading.value = false;
+
+  }
+
 };
 </script>
 
@@ -32,7 +64,18 @@ const handleLogin = () => {
           <input v-model="password" type="password" placeholder="••••••••" />
         </div>
 
-        <button class="login-btn">Login</button>
+        <button
+  class="login-btn"
+  :disabled="loading"
+>
+
+  {{
+    loading
+      ? "Loading..."
+      : "Login"
+  }}
+
+</button>
       </form>
 
       <div class="footer">
@@ -177,5 +220,10 @@ input:focus {
   font-weight: 600;
 
   text-decoration: none;
+}
+.login-btn:disabled {
+  opacity: 0.7;
+
+  cursor: not-allowed;
 }
 </style>

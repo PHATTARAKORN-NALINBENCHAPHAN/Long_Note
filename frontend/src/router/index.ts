@@ -1,4 +1,7 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {
+  createRouter,
+  createWebHistory
+} from "vue-router";
 
 import Home from "../pages/Home.vue";
 import Login from "../pages/Login.vue";
@@ -34,27 +37,60 @@ const routes = [
     path: "/about",
     component: About,
   },
+
   {
     path: "/create",
-
     component: CreateNote,
   },
+
   {
     path: "/note/:id",
-
     component: NoteDetail,
   },
+
   {
     path: "/edit/:id",
-
     component: EditNote,
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-
   routes,
 });
+
+router.beforeEach(
+  (to, _, next) => {
+
+    const token =
+      localStorage.getItem(
+        "token"
+      );
+
+    const protectedRoutes = [
+      "/dashboard",
+      "/create",
+    ];
+
+    const isProtected =
+      protectedRoutes.includes(
+        to.path
+      );
+
+    if (
+      isProtected &&
+      !token
+    ) {
+
+      next("/login");
+
+    } else {
+
+      next();
+
+    }
+
+  }
+);
 
 export default router;

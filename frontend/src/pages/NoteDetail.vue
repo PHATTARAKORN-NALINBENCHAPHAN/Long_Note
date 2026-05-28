@@ -1,67 +1,43 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { useRoute } from "vue-router";
+import {
+  ref,
+  onMounted
+} from "vue";
+
+import {
+  useRoute
+} from "vue-router";
+
+import api from "../lib/api";
 
 const route = useRoute();
 
-const mockNotes = [
-  {
-    id: 1,
+const note = ref<any>(null);
 
-    title: "Docker Setup",
+const fetchNote = async () => {
 
-    category: "DevOps",
+  try {
 
-    content: `
-Docker ช่วยให้เราสร้าง
-Container สำหรับ Deploy
-Application ได้ง่ายขึ้น
+    const response =
+      await api.get(
+        `/notes/${route.params.id}`
+      );
 
-เหมาะกับงาน Backend
-และ Production Environment
-`,
+    note.value =
+      response.data;
 
-    createdAt: "2025-07-18",
-  },
+  } catch (error) {
 
-  {
-    id: 2,
+    console.log(error);
 
-    title: "Vue Tips",
+  }
 
-    category: "Frontend",
+};
 
-    content: `
-Vue Composition API
-ช่วยให้การจัดการ Logic
-สะอาดและ Reuse ได้ง่าย
+onMounted(() => {
 
-เหมาะกับโปรเจกต์ขนาดใหญ่
-`,
+  fetchNote();
 
-    createdAt: "2025-07-19",
-  },
-
-  {
-    id: 3,
-
-    title: "MySQL Guide",
-
-    category: "Database",
-
-    content: `
-MySQL เป็น Relational Database
-
-เหมาะกับระบบ Blog
-และ CRUD Application
-`,
-
-    createdAt: "2025-07-20",
-  },
-];
-
-const note = computed(() => {
-  return mockNotes.find((note) => note.id === Number(route.params.id));
 });
 </script>
 

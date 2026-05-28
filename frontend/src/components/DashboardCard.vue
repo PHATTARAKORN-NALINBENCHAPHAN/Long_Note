@@ -3,22 +3,42 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const goEdit = () => {
-  router.push(`/edit/${props.id}`);
-};
-
 const props = defineProps<{
   id: number;
-
   title: string;
-
   category: string;
 }>();
 
-const emit = defineEmits(["delete"]);
+const emit = defineEmits<{
+  (
+    e: "delete",
+    id: number
+  ): void;
+}>();
 
 const openNote = () => {
-  router.push(`/note/${props.id}`);
+
+  router.push(
+    `/note/${props.id}`
+  );
+
+};
+
+const goEdit = () => {
+
+  router.push(
+    `/edit/${props.id}`
+  );
+
+};
+
+const handleDelete = () => {
+
+  emit(
+    "delete",
+    props.id
+  );
+
 };
 </script>
 
@@ -37,9 +57,12 @@ const openNote = () => {
     <div class="actions">
       <button class="edit" @click.stop="goEdit">Edit</button>
 
-      <button class="delete" @click.stop="emit('delete', props.id)">
-        Delete
-      </button>
+      <button
+  class="delete"
+  @click.stop="handleDelete"
+>
+  Delete
+</button>
     </div>
   </div>
 </template>
