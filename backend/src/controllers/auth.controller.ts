@@ -13,6 +13,25 @@ export const register = async (
     const { username, email, password } =
       req.body;
 
+    const [users]: any =
+  await pool.query(
+    `
+    SELECT *
+    FROM users
+    WHERE email = ?
+    `,
+    [email]
+  );
+
+if (users.length > 0) {
+
+  return res.status(400).json({
+    message:
+      "Email already exists"
+  });
+
+}
+
     const hashedPassword =
       await hashPassword(password);
 

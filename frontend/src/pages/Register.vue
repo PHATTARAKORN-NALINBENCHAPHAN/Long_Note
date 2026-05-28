@@ -62,11 +62,20 @@ const handleRegister =
 
     } catch (err: any) {
 
-      error.value =
-        err.response?.data
-          ?.message
-        ||
-        "Register failed";
+      if (
+  err.response?.data?.message
+  === "Email already exists"
+) {
+
+  error.value =
+    "อีเมลนี้ถูกใช้งานแล้ว";
+
+} else {
+
+  error.value =
+    "Register failed";
+
+}
 
     } finally {
 

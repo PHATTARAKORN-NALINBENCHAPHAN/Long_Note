@@ -6,12 +6,14 @@ import router from "../router";
 const email = ref("");
 const password = ref("");
 const loading = ref(false);
+const errorMessage = ref("");
 
 const handleLogin = async () => {
 
   try {
 
     loading.value = true;
+    errorMessage.value = "";
 
     const response =
       await api.post(
@@ -33,7 +35,8 @@ const handleLogin = async () => {
 
   } catch (error) {
 
-    console.log(error);
+    errorMessage.value =
+  "Invalid email or password";
 
   } finally {
 
@@ -76,6 +79,12 @@ const handleLogin = async () => {
   }}
 
 </button>
+<p
+  v-if="errorMessage"
+  class="error"
+>
+  {{ errorMessage }}
+</p>
       </form>
 
       <div class="footer">
@@ -225,5 +234,14 @@ input:focus {
   opacity: 0.7;
 
   cursor: not-allowed;
+}
+.error {
+  margin-top: 14px;
+
+  color: #dc2626;
+
+  font-size: 14px;
+
+  font-weight: 500;
 }
 </style>
