@@ -83,3 +83,81 @@ export const getNotes = async (
   }
 
 };
+
+export const updateNote = async (
+  req: Request,
+  res: Response
+) => {
+
+  try {
+
+    const { id } = req.params;
+
+    const {
+      title,
+      content,
+      category
+    } = req.body;
+
+    const user =
+      (req as any).user;
+
+    const [notes]: any =
+      await pool.query(
+        `
+        SELECT *
+        FROM notes
+        WHERE id = ?
+        AND user_id = ?
+        `,
+        [
+          id,
+          user.userId
+        ]
+      );
+
+    const note = notes[0];
+
+    if (!note) {
+
+      return res.status(404).json({
+        message:
+          "Note not found"
+      });
+
+    }
+
+    await pool.query(
+      `
+      UPDATE notes
+      SET
+        title = ?,
+        content = ?,
+        category = ?
+      WHERE id = ?
+      `,
+      [
+        title,
+        content,
+        category,
+        id
+      ]
+    );
+
+    res.json({
+      message:
+        "Note updated"
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message:
+        "Update note failed"
+    });
+
+  }
+
+};

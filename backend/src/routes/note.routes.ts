@@ -5,8 +5,10 @@ from "../middleware/auth.middleware";
 
 import {
   createNote,
-  getNotes
-} from "../controllers/note.controller";
+  getNotes,
+  updateNote
+}
+from "../controllers/note.controller";
 
 const router = express.Router();
 
@@ -20,6 +22,12 @@ router.get(
   "/",
   verifyToken,
   getNotes
+);
+
+router.put(
+  "/:id",
+  verifyToken,
+  updateNote
 );
 
 export default router;
