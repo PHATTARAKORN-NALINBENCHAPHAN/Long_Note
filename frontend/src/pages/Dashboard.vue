@@ -15,27 +15,15 @@ const notes = ref<any[]>([]);
 const search = ref("");
 
 const fetchNotes = async () => {
-
   try {
+    // ✅ เปลี่ยนเป็นเส้นสำหรับดึงเฉพาะโน้ตของฉัน (Dashboard ส่วนตัว)
+    const response = await api.get("/notes/me"); 
 
-    const response =
-      await api.get(
-        "/notes"
-      );
-
-    notes.value =
-      response.data.data;
-
-    console.log(
-      response.data
-    );
-
+    notes.value = response.data.data;
+    console.log(response.data);
   } catch (error) {
-
     console.log(error);
-
   }
-
 };
 
 onMounted(() => {
