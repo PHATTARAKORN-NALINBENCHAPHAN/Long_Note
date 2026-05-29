@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { useAuthStore } from "../stores/authStore"; // 1. นำเข้า authStore
+import { useAuthStore } from "../stores/authStore"; 
 
 import Home from "../pages/Home.vue";
 import Login from "../pages/Login.vue";
@@ -30,15 +30,20 @@ const router = createRouter({
   routes,
 });
 
-// 🔒 ปรับปรุง Route Guard ใหม่
+// 🔒 ปรับปรุง Route Guard ใหม่ให้ปลอดภัยจากอาการ Pinia Initialize Error
 router.beforeEach((to, _, next) => {
-  const authStore = useAuthStore(); // 2. เรียกใช้ Store ข้างใน guard
+  // 🛠️ ย้ายการเรียกใช้ useAuthStore() มาอยู่ในฟังก์ชันนี้แทน 
+  // เพื่อให้ทำงานหลังจาก Pinia ทำการสร้างระบบเสร็จสมบูรณ์ใน main.ts แล้ว
+  const authStore = useAuthStore(); 
 
   // เช็คเงื่อนไขจาก meta ที่เราตั้งไว้ใน routes
-  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+  // (ตรวจสอบว่ามี token หรือเช็คจากสถานะ isAuthenticated ของ store คุณได้เลย)
+  const isUserLoggedIn = !!authStore.token || authStore.isAuthenticated;
+
+  if (to.meta.requiresAuth && !isUserLoggedIn) {
     // ถ้าหน้านั้นต้อง Auth แต่ยังไม่ได้ Login -> ส่งไปหน้า Login
     next("/login");
-  } else if (to.meta.requiresGuest && authStore.isAuthenticated) {
+  } else if (to.meta.requiresGuest && isUserLoggedIn) {
     // ถ้า Login แล้ว แต่จะพยายามเข้าหน้า Login/Register -> ส่งไปหน้า Dashboard
     next("/dashboard");
   } else {

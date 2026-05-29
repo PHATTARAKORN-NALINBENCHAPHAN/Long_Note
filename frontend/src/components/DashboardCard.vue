@@ -10,125 +10,117 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (
-    e: "delete",
-    id: number
-  ): void;
+  (e: "delete", id: number): void;
 }>();
 
 const openNote = () => {
-
-  router.push(
-    `/note/${props.id}`
-  );
-
+  router.push(`/note/${props.id}`);
 };
 
 const goEdit = () => {
-
-  router.push(
-    `/edit/${props.id}`
-  );
-
+  router.push(`/edit/${props.id}`);
 };
 
 const handleDelete = () => {
-
-  emit(
-    "delete",
-    props.id
-  );
-
+  emit("delete", props.id);
 };
 </script>
 
 <template>
-  <div class="card" @click="openNote">
-    <div>
-      <h3>
-        {{ title }}
-      </h3>
-
-      <p>
-        {{ category }}
-      </p>
+  <div class="card dark-glass" @click="openNote">
+    <div class="card-info">
+      <h3>{{ title }}</h3>
+      <span class="category-badge">{{ category }}</span>
     </div>
 
     <div class="actions">
-      <button class="edit" @click.stop="goEdit">Edit</button>
-
-      <button
-  class="delete"
-  @click.stop="handleDelete"
->
-  Delete
-</button>
+      <button class="edit-btn" @click.stop="goEdit">Edit</button>
+      <button class="delete-btn" @click.stop="handleDelete">Delete</button>
     </div>
   </div>
 </template>
 
 <style scoped>
 .card {
-  background: white;
-
   padding: 24px;
-
-  border: 1px solid #ececec;
-
-  border-radius: 18px;
-
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
-  transition: 0.2s;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
+/* 🔥 ตอนเอาเมาส์วาง ให้กระจกสว่างขึ้น ขอบชัดขึ้น และมีออร่าม่วงฟุ้งเบาๆ */
 .card:hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  background: var(--glass-bg-hover);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.15);
+  transform: translateY(-2px);
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
 }
 
 h3 {
   font-size: 18px;
-
-  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0;
 }
 
-p {
-  color: #6b7280;
-
-  font-size: 14px;
+/* 💠 ป้ายไฟหมวดหมู่โทนฟ้าสว่าง */
+.category-badge {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  padding: 4px 12px;
+  border-radius: 999px;
 }
 
 .actions {
   display: flex;
-
   gap: 10px;
 }
 
 button {
-  padding: 8px 14px;
-
+  padding: 8px 16px;
   border: none;
-
   border-radius: 10px;
-
-  font-weight: 500;
-
+  font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.edit {
-  background: #eef2ff;
-
-  color: #4f46e5;
+/* ม่วงโปร่งแสงเท่ๆ */
+.edit-btn {
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
 }
 
-.delete {
-  background: #fee2e2;
+.edit-btn:hover {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+}
 
-  color: #dc2626;
+/* แดงโปร่งแสงเข้มๆ */
+.delete-btn {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+  color: white;
+  box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
 }
 </style>
