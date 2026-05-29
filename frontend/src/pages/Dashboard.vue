@@ -16,13 +16,13 @@ const search = ref("");
 
 const fetchNotes = async () => {
   try {
-    // ✅ เปลี่ยนเป็นเส้นสำหรับดึงเฉพาะโน้ตของฉัน (Dashboard ส่วนตัว)
+    // ยิงเข้าเส้น Protected Route สำหรับดึงโน้ตส่วนตัว
     const response = await api.get("/notes/me"); 
 
+    // รับก้อน Array โน้ตที่ถูกกรองมาแล้วจากหลังบ้าน
     notes.value = response.data.data;
-    console.log(response.data);
   } catch (error) {
-    console.log(error);
+    console.log("Error fetching user notes:", error);
   }
 };
 

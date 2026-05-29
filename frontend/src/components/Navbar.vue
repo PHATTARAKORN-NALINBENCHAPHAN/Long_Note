@@ -1,28 +1,25 @@
 <script setup lang="ts">
 import { computed } from "vue";
-
 import { useRouter } from "vue-router";
+import { useAuthStore } from "../stores/authStore"; // 1. นำเข้า authStore
 
 const router = useRouter();
+const authStore = useAuthStore(); // 2. เรียกใช้งาน Store
 
-const isLoggedIn = computed(() => {
+// 3. เปลี่ยนมาเช็คสถานะการเข้าสู่ระบบผ่าน Pinia Store
+const isLoggedIn = computed(() => authStore.isAuthenticated);
 
-  return !!localStorage.getItem(
-    "token"
-  );
-
-});
+// 4. ดึงข้อมูลอีเมลผู้ใช้มาแสดงแทนคำว่า User เฉยๆ (ถ้ามี)
+const userEmail = computed(() => authStore.user?.email || "User");
 
 const handleLogout = () => {
+  // 5. เรียกใช้ action logout ของ store (มันจะเคลียร์ค่าใน store และ localStorage ให้เอง)
+  authStore.logout();
 
-  localStorage.removeItem(
-    "token"
-  );
-
+  // 6. ดีดผู้ใช้กลับหน้า Login หรือ Home
   router.push("/login");
-
-  window.location.reload();
-
+  
+  // ❌ ลบ window.location.reload(); ออกได้เลย เพราะ UI จะอัปเดตเองอัตโนมัติ!
 };
 </script>
 <template>
@@ -40,19 +37,17 @@ const handleLogout = () => {
     <div class="nav-right">
 
   <template v-if="isLoggedIn">
+  <div class="profile">
+    👤 {{ userEmail }}
+  </div>
 
-    <div class="profile">
-      👤 User
-    </div>
-
-    <button
-      class="logout-btn"
-      @click="handleLogout"
-    >
-      Logout
-    </button>
-
-  </template>
+  <button
+    class="logout-btn"
+    @click="handleLogout"
+  >
+    Logout
+  </button>
+</template>
 
   <template v-else>
 

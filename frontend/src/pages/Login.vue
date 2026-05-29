@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import api from "../lib/api";
-import router from "../router";
+import { useRouter } from "vue-router"; // เปลี่ยนไปใช้ useRouter composable (ถ้าใช้ใน script setup แนะนำตัวนี้)
+import { useAuthStore } from "../stores/authStore"; // 1. นำเข้า authStore
+
+const router = useRouter();
+const authStore = useAuthStore(); // 2. เรียกใช้งาน Store
 
 const email = ref("");
 const password = ref("");
@@ -9,41 +13,35 @@ const loading = ref(false);
 const errorMessage = ref("");
 
 const handleLogin = async () => {
-
   try {
-
     loading.value = true;
     errorMessage.value = "";
 
-    const response =
-      await api.post(
-        "/auth/login",
-        {
-          email: email.value,
-          password: password.value,
-        }
-      );
+    const response = await api.post("/auth/login", {
+      email: email.value,
+      password: password.value,
+    });
 
-    localStorage.setItem(
-      "token",
-      response.data.token
-    );
+    // 3. เรียกใช้ setToken ของ Store แทนการใช้ localStorage ตรงๆ
+    // (ส่งทั้ง token และข้อมูล user ที่ได้จาก backend เข้าไปเก็บ)
+    const token = response.data.token;
+    const user = response.data.user || { email: email.value }; // ป้องกันไว้เผื่อ backend ไม่ได้ส่งก้อน user มา
+    
+    authStore.setToken(token, user);
 
-    router.push(
-      "/dashboard"
-    );
+    // 4. วิ่งไปหน้า dashboard
+    router.push("/dashboard");
 
-  } catch (error) {
-
-    errorMessage.value =
-  "Invalid email or password";
-
+  } catch (error: any) {
+    // 5. ปรับให้ดึง Error Message จาก Backend มาแสดง (ถ้ามี) จะได้ยืดหยุ่นขึ้น
+    if (error.response && error.response.data && error.response.data.message) {
+      errorMessage.value = error.response.data.message;
+    } else {
+      errorMessage.value = "Invalid email or password";
+    }
   } finally {
-
     loading.value = false;
-
   }
-
 };
 </script>
 

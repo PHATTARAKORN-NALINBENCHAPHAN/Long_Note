@@ -7,7 +7,8 @@ import {
   deleteNote,
   searchNotes,
   getNotesByCategory,
-  getSingleNote
+  getSingleNote,
+  getMyNotes
 } from "../controllers/note.controller";
 
 const router = express.Router();
@@ -15,6 +16,9 @@ const router = express.Router();
 // ==========================================
 // 🔓 PUBLIC ROUTES (ทุกคนเห็น / ทุกคนค้นหาได้ - ไม่ต้องมี verifyToken)
 // ==========================================
+
+// ล็อกสิทธิ์ด้วย verifyToken เพื่อเอาไว้ดึงเฉพาะโน้ตของผู้ใช้คนนั้นๆ
+router.get("/me", verifyToken, getMyNotes);
 
 // 1. Home -> ทุกคนเห็นทุก note
 router.get(
@@ -39,7 +43,6 @@ router.get(
   "/:id", 
   getSingleNote
 );
-
 
 // ==========================================
 // 🔒 PROTECTED ROUTES (Owner Only - ต้องมี verifyToken)

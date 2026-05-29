@@ -194,3 +194,42 @@ export const getSingleNote = async (req: Request, res: Response, next: NextFunct
     next(error);
   }
 };
+
+export const getMyNotes = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const user = (req as any).user; // ดึงข้อมูล user จาก token ที่ผ่าน middleware มา
+
+    // ดึงข้อมูล Pagination จาก query parameters (เผื่ออนาคตคุณทำเพิ่ม)
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    // 🔥 ใส่ WHERE user_id = ? เพื่อดึงเฉพาะของเจ้าของ Token
+    const [notes] = await pool.query(
+      `
+      SELECT * FROM notes 
+      WHERE user_id = ? 
+      ORDER BY created_at DESC
+      LIMIT ? OFFSET ?
+      `,
+      [user.userId, limit, offset] // ⚠️ เช็คใน auth.controller ตอน sign token ด้วยนะว่าใช้ user.userId หรือ user.id
+    );
+
+    // นับจำนวนโน้ตทั้งหมดของผู้ใช้คนนี้เพื่อทำ Pagination
+    const [totalResult]: any = await pool.query(
+      `SELECT COUNT(*) as total FROM notes WHERE user_id = ?`, 
+      [user.userId]
+    );
+    const total = totalResult[0].total;
+
+    res.json({
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+      data: notes // ส่งเฉพาะโน้ตที่เป็นของเรากลับไป
+    });
+  } catch (error) {
+    next(error);
+  }
+};
