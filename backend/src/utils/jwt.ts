@@ -1,14 +1,10 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
-const SECRET =
-  process.env.JWT_SECRET as string;
+const JWT_SECRET = process.env.JWT_SECRET || 'super_cyber_secret_key_123';
 
-export const generateToken = (
-  userId: number
-) => {
-  return jwt.sign(
-    { userId },
-    SECRET,
-    { expiresIn: "7d" }
-  );
+// ปรับให้รับค่าเป็น Object { userId: number }
+export const generateToken = (payload: { userId: number }): string => {
+  return jwt.sign(payload, JWT_SECRET, {
+    expiresIn: '7d',
+  });
 };
