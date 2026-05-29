@@ -1,43 +1,45 @@
 <script setup lang="ts">
-import {
-  ref,
-  onMounted
-} from "vue";
-
-import {
-  useRoute
-} from "vue-router";
-
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router"; // เพิ่ม useRouter เผื่อใช้ดีดผู้ใช้กลับ
 import api from "../lib/api";
+import { useNotificationStore } from "../stores/notificationStore"; // 1. นำเข้า notificationStore
 
 const route = useRoute();
+const notificationStore = useNotificationStore(); // 2. เรียกใช้งาน Store
 
 const note = ref<any>(null);
+const loading = ref(true); // เพิ่มตัวแปรสถานะการโหลดเพื่อทำ UX ที่ดีขึ้น
 
 const fetchNote = async () => {
-
   try {
-
-    const response =
-      await api.get(
-        `/notes/${route.params.id}`
-      );
-
-    note.value =
-      response.data;
-
-  } catch (error) {
-
+    loading.value = true;
+    const response = await api.get(`/notes/${route.params.id}`);
+    note.value = response.data;
+  } catch (error: any) {
     console.log(error);
-
+    // ❌ แจ้งเตือนเมื่อไม่พบโน้ต หรือเกิด Error
+    notificationStore.showNotification("ไม่พบบทความหรือโน้ตที่คุณต้องการ", "error");
+    
+    // ออพชันเสริม: ดีดผู้ใช้กลับหน้า Dashboard ทันทีถ้าไม่เจอโน้ต (เปิดคอมเมนต์ใช้งานได้ครับ)
+    // router.push("/dashboard"); 
+  } finally {
+    loading.value = false;
   }
+};
 
+// ฟังก์ชันแปลงวันที่ให้อ่านง่ายสไตล์ไทย (เช่น 29 พ.ค. 2026)
+const formatDate = (dateString: string) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return date.toLocaleDateString("th-TH", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 };
 
 onMounted(() => {
-
   fetchNote();
-
 });
 </script>
 
@@ -45,11 +47,10 @@ onMounted(() => {
   <div class="container" v-if="note">
     <div class="top">
       <span>
-        {{ note.category }}
+        {{ note.category || "ทั่วไป" }}
       </span>
-
       <p>
-        {{ note.createdAt }}
+        📅 {{ formatDate(note.created_at) }}
       </p>
     </div>
 
@@ -62,10 +63,14 @@ onMounted(() => {
     </article>
   </div>
 
+  <div v-else-if="loading" class="empty">
+    <h2>Loading...</h2>
+    <p>กำลังดึงข้อมูลโน้ตของคุณ</p>
+  </div>
+
   <div v-else class="empty">
     <h2>Note Not Found</h2>
-
-    <p>ไม่พบบทความนี้</p>
+    <p>ไม่พบบทความนี้ในระบบ</p>
   </div>
 </template>
 

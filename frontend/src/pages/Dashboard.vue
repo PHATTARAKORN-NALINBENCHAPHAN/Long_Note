@@ -1,83 +1,72 @@
 <script setup lang="ts">
 import DashboardCard from "../components/DashboardCard.vue";
 import SearchBar from "../components/SearchBar.vue";
-
-import {
-  ref,
-  computed,
-  onMounted
-} from "vue";
-
+import { ref, computed, onMounted } from "vue";
 import api from "../lib/api";
+import { useNotificationStore } from "../stores/notificationStore"; // 1. นำเข้า notificationStore
+
+const notificationStore = useNotificationStore(); // 2. เรียกใช้งาน Store
 
 const notes = ref<any[]>([]);
-
 const search = ref("");
+const loading = ref(false); // เพิ่มสถานะการโหลดเผื่อใช้ควบคุมหน้าจอ
 
 const fetchNotes = async () => {
   try {
+    loading.value = true;
     // ยิงเข้าเส้น Protected Route สำหรับดึงโน้ตส่วนตัว
     const response = await api.get("/notes/me"); 
 
-    // รับก้อน Array โน้ตที่ถูกกรองมาแล้วจากหลังบ้าน
-    notes.value = response.data.data;
+    // รับก้อน Array โน้ตที่ถูกกรองมาแล้วจากหลังบ้าน (ใส่ || [] เผื่อกรณีไม่มีข้อมูล)
+    notes.value = response.data.data || [];
   } catch (error) {
     console.log("Error fetching user notes:", error);
+    // ❌ แจ้งเตือนเมื่อดึงข้อมูลโน้ตส่วนตัวล้มเหลว
+    notificationStore.showNotification("ไม่สามารถดึงข้อมูลโน้ตของคุณได้ กรุณาลองใหม่อีกครั้ง", "error");
+  } finally {
+    loading.value = false;
   }
 };
 
 onMounted(() => {
-
   fetchNotes();
-
 });
 
 const filteredNotes = computed(() => {
-
   if (!search.value.trim()) {
-
     return notes.value;
-
   }
 
-  const keyword =
-    search.value.toLowerCase();
+  const keyword = search.value.toLowerCase();
 
-  return notes.value.filter(
-    (note) =>
-      note.title
-        .toLowerCase()
-        .includes(keyword)
-      ||
-      note.category
-        .toLowerCase()
-        .includes(keyword)
-  );
+  return notes.value.filter((note) => {
+    // 🛠️ ใส่ ?. และ || "" ป้องกัน Error หากข้อมูลบางฟิลด์เป็น null/undefined
+    const title = note?.title?.toLowerCase() || "";
+    const category = note?.category?.toLowerCase() || "";
 
+    return title.includes(keyword) || category.includes(keyword);
+  });
 });
 
-const deleteNote = async (
-  id: number
-) => {
-
-  try {
-
-    await api.delete(
-      `/notes/${id}`
-    );
-
-    notes.value =
-      notes.value.filter(
-        (note) =>
-          note.id !== id
-      );
-
-  } catch (error) {
-
-    console.log(error);
-
+const deleteNote = async (id: number) => {
+  // ถามเพื่อยืนยันก่อนลบเพื่อความปลอดภัย (UX ที่ดี)
+  if (!confirm("คุณแน่ใจหรือไม่ว่าต้องการลบโน้ตนี้?")) {
+    return;
   }
 
+  try {
+    await api.delete(`/notes/${id}`);
+
+    // อัปเดตข้อมูลบนหน้าจอทันทีหลังจากลบหลังบ้านสำเร็จ
+    notes.value = notes.value.filter((note) => note.id !== id);
+
+    // 🎉 แจ้งเตือนเมื่อลบโน้ตเรียบร้อยแล้ว
+    notificationStore.showNotification("ลบโน้ตเรียบร้อยแล้ว", "success");
+  } catch (error) {
+    console.log(error);
+    // ❌ แจ้งเตือนเมื่อเกิดข้อผิดพลาดในการลบ
+    notificationStore.showNotification("ไม่สามารถลบโน้ตได้ กรุณาลองใหม่อีกครั้ง", "error");
+  }
 };
 </script>
 
